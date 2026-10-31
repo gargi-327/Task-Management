@@ -1,4 +1,3 @@
-
 package com.example.taskmanagement.entity;
 
 import com.example.taskmanagement.enums.Priority;
@@ -14,8 +13,9 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long projectId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "project_id", nullable = false)
+    private Project project;
 
     @Column(nullable = false)
     private String title;
@@ -34,12 +34,15 @@ public class Task {
 
     private LocalDate dueDate;
 
-    private Long assigneeId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "assignee_id")
+    private User assignee;
 
-    private Long createdBy;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "created_by")
+    private User creator;
 
-    public Task() {
-    }
+    public Task() {}
 
     public Long getId() {
         return id;
@@ -49,12 +52,12 @@ public class Task {
         this.id = id;
     }
 
-    public Long getProjectId() {
-        return projectId;
+    public Project getProject() {
+        return project;
     }
 
-    public void setProjectId(Long projectId) {
-        this.projectId = projectId;
+    public void setProject(Project project) {
+        this.project = project;
     }
 
     public String getTitle() {
@@ -105,19 +108,19 @@ public class Task {
         this.dueDate = dueDate;
     }
 
-    public Long getAssigneeId() {
-        return assigneeId;
+    public User getAssignee() {
+        return assignee;
     }
 
-    public void setAssigneeId(Long assigneeId) {
-        this.assigneeId = assigneeId;
+    public void setAssignee(User assignee) {
+        this.assignee = assignee;
     }
 
-    public Long getCreatedBy() {
-        return createdBy;
+    public User getCreator() {
+        return creator;
     }
 
-    public void setCreatedBy(Long createdBy) {
-        this.createdBy = createdBy;
+    public void setCreator(User creator) {
+        this.creator = creator;
     }
 }

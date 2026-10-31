@@ -1,11 +1,14 @@
-
 package com.example.taskmanagement.service;
 
 import com.example.taskmanagement.entity.Task;
+import com.example.taskmanagement.entity.Project;
+import com.example.taskmanagement.entity.User;
 import com.example.taskmanagement.enums.Priority;
 import com.example.taskmanagement.enums.TaskStatus;
 import com.example.taskmanagement.repository.TaskRepository;
 import com.example.taskmanagement.repository.ProjectRepository;
+import com.example.taskmanagement.repository.UserRepository;
+
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -16,12 +19,16 @@ public class TaskService {
 
     private final TaskRepository taskRepository;
     private final ProjectRepository projectRepository;
+    private final UserRepository userRepository;
 
     public TaskService(
             TaskRepository taskRepository,
-            ProjectRepository projectRepository) {
+            ProjectRepository projectRepository,
+            UserRepository userRepository) {
+
         this.taskRepository = taskRepository;
         this.projectRepository = projectRepository;
+        this.userRepository = userRepository;
     }
 
     public Task createTask(Task task) {
@@ -47,13 +54,14 @@ public class TaskService {
 
         return taskRepository.findAll().stream()
                 .filter(task -> projectId == null
-                        || projectId.equals(task.getProjectId()))
+                        || projectId.equals(task.getProject().getId()))
                 .filter(task -> status == null
                         || status == task.getStatus())
                 .filter(task -> priority == null
                         || priority == task.getPriority())
                 .filter(task -> assigneeId == null
-                        || assigneeId.equals(task.getAssigneeId()))
+                        || (task.getAssignee() != null
+                        && assigneeId.equals(task.getAssignee().getId())))
                 .filter(task -> dueDate == null
                         || dueDate.equals(task.getDueDate()))
                 .toList();
@@ -66,12 +74,11 @@ public class TaskService {
     public Task getTaskById(Long id) {
         return taskRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException(
-                                "Task not found with ID: " + id));
+                        new RuntimeException("Task not found with ID: " + id));
     }
 
     public List<Task> getTasksByProject(Long projectId) {
-        return taskRepository.findByProjectId(projectId);
+        return taskRepository.findByProject_Id(projectId);
     }
 
     public List<Task> getTasksByStatus(TaskStatus status) {
@@ -83,7 +90,7 @@ public class TaskService {
     }
 
     public List<Task> getTasksByAssignee(Long assigneeId) {
-        return taskRepository.findByAssigneeId(assigneeId);
+        return taskRepository.findByAssignee_Id(assigneeId);
     }
 
     public List<Task> getOverdueTasks() {
@@ -122,8 +129,16 @@ public class TaskService {
             existingTask.setDueDate(updatedTask.getDueDate());
         }
 
-        if (updatedTask.getAssigneeId() != null) {
-            existingTask.setAssigneeId(updatedTask.getAssigneeId());
+        if (updatedTask.getProject() != null) {
+            existingTask.setProject(updatedTask.getProject());
+        }
+
+        if (updatedTask.getAssignee() != null) {
+            existingTask.setAssignee(updatedTask.getAssignee());
+        }
+
+        if (updatedTask.getCreator() != null) {
+            existingTask.setCreator(updatedTask.getCreator());
         }
 
         validateTask(existingTask);
@@ -167,13 +182,43 @@ public class TaskService {
     }
 
     private void validateTask(Task task) {
-        if (task.getProjectId() == null) {
+
+        if (task.getProject() == null
+                || task.getProject().getId() == null) {
             throw new IllegalArgumentException("Project ID is required");
         }
 
-        if (!projectRepository.existsById(task.getProjectId())) {
-            throw new IllegalArgumentException(
-                    "Project not found with ID: " + task.getProjectId());
+        Project project = projectRepository.findById(
+                        task.getProject().getId())
+                .orElseThrow(() ->
+                        new IllegalArgumentException(
+                                "Project not found with ID: "
+                                        + task.getProject().getId()));
+
+        task.setProject(project);
+
+        if (task.getAssignee() != null
+                && task.getAssignee().getId() != null) {
+
+            User assignee = userRepository.findById(
+                            task.getAssignee().getId())
+                    .orElseThrow(() ->
+                            new IllegalArgumentException(
+                                    "Assignee not found"));
+
+            task.setAssignee(assignee);
+        }
+
+        if (task.getCreator() != null
+                && task.getCreator().getId() != null) {
+
+            User creator = userRepository.findById(
+                            task.getCreator().getId())
+                    .orElseThrow(() ->
+                            new IllegalArgumentException(
+                                    "Creator not found"));
+
+            task.setCreator(creator);
         }
 
         if (task.getTitle() == null || task.getTitle().isBlank()) {

@@ -3,6 +3,7 @@ package com.example.taskmanagement.controller;
 
 import com.example.taskmanagement.entity.Project;
 import com.example.taskmanagement.repository.ProjectRepository;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +22,11 @@ public class ProjectController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Project createProject(@RequestBody Project project) {
+
+        if (project.getName() == null || project.getName().isBlank()) {
+            throw new IllegalArgumentException("Project name is required");
+        }
+
         return projectRepository.save(project);
     }
 
@@ -33,7 +39,7 @@ public class ProjectController {
     public Project getProjectById(@PathVariable Long id) {
         return projectRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException(
+                        new IllegalArgumentException(
                                 "Project not found with ID: " + id));
     }
 }
