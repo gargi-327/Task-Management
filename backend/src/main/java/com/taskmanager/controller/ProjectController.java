@@ -2,6 +2,7 @@ package com.taskmanager.controller;
 
 import com.taskmanager.dto.ProjectRequest;
 import com.taskmanager.dto.ProjectResponse;
+import com.taskmanager.dto.ProjectSummaryResponse;
 import com.taskmanager.service.ProjectService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,8 @@ public class ProjectController {
     public List<ProjectResponse> list(@RequestParam(defaultValue = "false") boolean includeArchived) { return service.findAll(includeArchived); }
     @GetMapping("/{id}")
     public ProjectResponse get(@PathVariable Long id) { return service.findOne(id); }
+    @GetMapping("/{id}/summary")
+    public ProjectSummaryResponse summary(@PathVariable Long id) { return service.summary(id); }
     @PutMapping("/{id}")
     public ProjectResponse update(@PathVariable Long id, @Valid @RequestBody ProjectRequest request) { return service.update(id, request); }
     @PatchMapping("/{id}/archive")

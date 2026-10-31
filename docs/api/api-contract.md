@@ -10,6 +10,15 @@
 | POST | `/api/projects/{id}/tasks` | Create a task in a valid project |
 | GET | `/api/tasks` | Filter by `projectId`, `status`, `priority`, `assigneeId`, `dueDate` |
 | PATCH | `/api/tasks/{id}/status` | Update status subject to ownership and transition rules |
-| GET | `/api/projects/{id}/summary` | Get total, TODO, in-progress, done, and overdue counts |
+| GET | `/api/projects/{id}/summary` | Get total, TODO/pending, in-progress, done/completed, and overdue counts |
 
 Required task fields: `projectId`, `title`, `priority`, `status`, `startDate`, `dueDate`, and `assigneeId`. `dueDate` must be on or after `startDate`.
+
+## Project endpoints implemented by Member 1
+
+- `POST /api/projects` returns `201 Created`. It rejects missing names, missing creators, unknown creators, and a due date earlier than the start date.
+- `GET /api/projects` lists active projects by default. Use `?includeArchived=true` to include archived projects.
+- `GET /api/projects/{id}` returns one project or `404`.
+- `PUT /api/projects/{id}` validates and updates project details.
+- `PATCH /api/projects/{id}/archive` soft-archives the project by setting `archived=true`; it does not delete project or task history.
+- `GET /api/projects/{id}/summary` returns `totalTasks`, `pendingTasks` (`TODO`), `inProgressTasks`, `completedTasks` (`DONE`), and `overdueTasks`. Overdue means `dueDate` before today and a status other than `DONE`.
