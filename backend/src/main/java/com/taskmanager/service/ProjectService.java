@@ -2,6 +2,7 @@ package com.taskmanager.service;
 
 import com.taskmanager.dto.ProjectRequest;
 import com.taskmanager.dto.ProjectResponse;
+import com.taskmanager.dto.ProjectSummaryResponse;
 import com.taskmanager.entity.Project;
 import com.taskmanager.entity.TaskStatus;
 import com.taskmanager.entity.User;
