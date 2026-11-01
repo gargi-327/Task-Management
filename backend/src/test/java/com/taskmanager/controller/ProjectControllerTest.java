@@ -1,5 +1,6 @@
 package com.taskmanager.controller;
 
+import com.taskmanager.dto.ProjectRequest;
 import com.taskmanager.dto.ProjectResponse;
 import com.taskmanager.exception.NotFoundException;
 import com.taskmanager.service.ProjectService;
@@ -44,7 +45,7 @@ class ProjectControllerTest {
 
     @Test
     void updatesProject() throws Exception {
-        when(projectService.update(eq(1L), any())).thenReturn(project);
+        when(projectService.update(eq(1L), any(ProjectRequest.class))).thenReturn(project);
         mockMvc.perform(put("/api/projects/1").contentType(MediaType.APPLICATION_JSON).content(validRequest))
                 .andExpect(status().isOk()).andExpect(jsonPath("$.dueDate").value("2026-11-20"));
     }

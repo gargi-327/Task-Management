@@ -6,3 +6,4 @@ backend/target/
 .env
 node_modules/
 dist/
+backend/src/main/resources/application-local.properties
