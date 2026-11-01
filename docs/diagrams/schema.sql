@@ -40,7 +40,7 @@ CREATE TABLE tasks (
     priority VARCHAR(20) NOT NULL,
     status VARCHAR(20) NOT NULL,
     start_date DATE NOT NULL,
-    due_date DATE NOT NULL,
+    due_date DATE,
     assignee_id BIGINT,
     created_by_id BIGINT NOT NULL,
     CONSTRAINT fk_tasks_project FOREIGN KEY (project_id) REFERENCES projects(id),

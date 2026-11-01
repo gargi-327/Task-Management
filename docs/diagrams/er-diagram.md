@@ -49,7 +49,7 @@ erDiagram
 - One user creates many projects; every project has exactly one creator.
 - `ProjectMember` is the many-to-many join between users and projects. `(project_id, user_id)` is unique.
 - A project owns many tasks. A task cannot exist without a valid project.
-- A task has one creator and may have one assignee. The assignee must later be checked against project membership in the task service.
+- A task has one creator and may have one assignee. The assignee must later be checked against project membership in the task service. A task may have no due date; it is never counted as overdue in that case.
 - Projects use a soft archive flag so historical tasks remain intact.
 
 ## Useful indexes

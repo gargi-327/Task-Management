@@ -3,6 +3,7 @@ package com.taskmanager.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.Map;
@@ -17,6 +18,10 @@ public class ApiExceptionHandler {
     ResponseEntity<Map<String, String>> invalid(MethodArgumentNotValidException ex) {
         String message = ex.getBindingResult().getFieldErrors().stream().findFirst().map(e -> e.getField() + " " + e.getDefaultMessage()).orElse("Validation failed");
         return error(HttpStatus.BAD_REQUEST, message);
+    }
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    ResponseEntity<Map<String, String>> invalidPathValue(MethodArgumentTypeMismatchException ex) {
+        return error(HttpStatus.BAD_REQUEST, ex.getName() + " has an invalid value");
     }
     private ResponseEntity<Map<String, String>> error(HttpStatus status, String message) {
         return ResponseEntity.status(status).body(Map.of("message", message));

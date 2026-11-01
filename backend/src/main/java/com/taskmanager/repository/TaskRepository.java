@@ -19,6 +19,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
             select count(t) from Task t
             where t.project.id = :projectId
               and t.dueDate < :today
+              and t.dueDate is not null
               and t.status <> com.taskmanager.entity.TaskStatus.DONE
             """)
     long countOverdueByProjectId(@Param("projectId") Long projectId, @Param("today") LocalDate today);

@@ -10,14 +10,22 @@ Spring Boot REST API starter. The completed project module exposes:
 
 ## Run locally
 
-Requires Java 17 and Maven.
+Requires Java 17+, Maven, and MySQL. The application reads its database settings from environment variables; no credentials are stored in the repository.
+
+```powershell
+$env:DB_URL="jdbc:mysql://localhost:3306/task_manager?createDatabaseIfNotExist=true&serverTimezone=UTC"
+$env:DB_USERNAME="task_manager_user"
+$env:DB_PASSWORD="your-local-password"
+# Optional; defaults to update
+$env:JPA_DDL_AUTO="update"
+```
 
 ```powershell
 cd C:\Projects\task_manager\backend
 mvn spring-boot:run
 ```
 
-The default H2 development database is in memory and the H2 console is available at `http://localhost:8080/h2-console`.
+MySQL is used at runtime. H2 is test-scoped only and is automatically selected by the `test` Spring profile.
 
 Run the project-module test suite:
 
@@ -44,4 +52,4 @@ Create/update request body:
 - Project entity, repository, service, controller, DTOs, validation, and soft archive support.
 - ER diagram and MySQL-style reference schema in `../docs/diagrams/`.
 - API contract notes in `../docs/api/api-contract.md`.
-- MVC and service tests for create, view, update, archive, missing required fields, invalid dates, unknown creators, and unknown project IDs.
+- MVC and service tests for create, view, update preservation, archive, summaries, missing required fields, invalid dates, unknown creators, and unknown project IDs.

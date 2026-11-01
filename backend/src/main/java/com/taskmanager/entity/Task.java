@@ -18,7 +18,8 @@ public class Task {
     @Enumerated(EnumType.STRING) @Column(nullable = false, length = 20) private TaskPriority priority;
     @Enumerated(EnumType.STRING) @Column(nullable = false, length = 20) private TaskStatus status;
     @Column(name = "start_date", nullable = false) private LocalDate startDate;
-    @Column(name = "due_date", nullable = false) private LocalDate dueDate;
+    // A task without a deadline is valid but can never be overdue.
+    @Column(name = "due_date") private LocalDate dueDate;
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "assignee_id") private User assignee;
     @ManyToOne(fetch = FetchType.LAZY, optional = false) @JoinColumn(name = "created_by_id", nullable = false) private User createdBy;
 }

@@ -3,6 +3,7 @@ package com.taskmanager.controller;
 import com.taskmanager.dto.ProjectRequest;
 import com.taskmanager.dto.ProjectResponse;
 import com.taskmanager.dto.ProjectSummaryResponse;
+import com.taskmanager.dto.ProjectUpdateRequest;
 import com.taskmanager.service.ProjectService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -24,7 +25,7 @@ public class ProjectController {
     @GetMapping("/{id}/summary")
     public ProjectSummaryResponse summary(@PathVariable Long id) { return service.summary(id); }
     @PutMapping("/{id}")
-    public ProjectResponse update(@PathVariable Long id, @Valid @RequestBody ProjectRequest request) { return service.update(id, request); }
+    public ProjectResponse update(@PathVariable Long id, @Valid @RequestBody ProjectUpdateRequest request) { return service.update(id, request); }
     @PatchMapping("/{id}/archive")
     public ProjectResponse archive(@PathVariable Long id) { return service.archive(id); }
 }

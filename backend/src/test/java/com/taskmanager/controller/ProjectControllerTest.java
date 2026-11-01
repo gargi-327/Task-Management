@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.context.ActiveProfiles;
 import java.time.LocalDate;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -17,6 +18,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(ProjectController.class)
+@ActiveProfiles("test")
 class ProjectControllerTest {
     @Autowired private MockMvc mockMvc;
     @MockBean private ProjectService projectService;
@@ -45,7 +47,8 @@ class ProjectControllerTest {
     @Test
     void updatesProject() throws Exception {
         when(projectService.update(eq(1L), any())).thenReturn(project);
-        mockMvc.perform(put("/api/projects/1").contentType(MediaType.APPLICATION_JSON).content(validRequest))
+        mockMvc.perform(put("/api/projects/1").contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Website redesign\",\"dueDate\":\"2026-11-20\",\"createdById\":999,\"archived\":false}"))
                 .andExpect(status().isOk()).andExpect(jsonPath("$.dueDate").value("2026-11-20"));
     }
 
@@ -61,6 +64,13 @@ class ProjectControllerTest {
     @Test
     void rejectsMissingRequiredProjectFields() throws Exception {
         mockMvc.perform(post("/api/projects").contentType(MediaType.APPLICATION_JSON).content("{}"))
+                .andExpect(status().isBadRequest()).andExpect(jsonPath("$.message").exists());
+    }
+
+    @Test
+    void rejectsBlankProjectName() throws Exception {
+        mockMvc.perform(post("/api/projects").contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"   \",\"createdById\":7}"))
                 .andExpect(status().isBadRequest()).andExpect(jsonPath("$.message").exists());
     }
 
