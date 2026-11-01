@@ -1,7 +1,10 @@
-package com.example.taskmanagement.dto;
 
-import com.example.taskmanagement.enums.Priority;
-import com.example.taskmanagement.enums.TaskStatus;
+package com.taskmanager.dto;
+
+import com.taskmanager.entity.Task;
+import com.taskmanager.entity.TaskPriority;
+import com.taskmanager.entity.TaskStatus;
+
 import java.time.LocalDate;
 
 public class TaskResponse {
@@ -10,7 +13,7 @@ public class TaskResponse {
     private Long projectId;
     private String title;
     private String description;
-    private Priority priority;
+    private TaskPriority priority;
     private TaskStatus status;
     private LocalDate startDate;
     private LocalDate dueDate;
@@ -18,6 +21,33 @@ public class TaskResponse {
     private Long createdBy;
 
     public TaskResponse() {
+    }
+
+    public static TaskResponse from(Task task) {
+        if (task == null) {
+            return null;
+        }
+
+        TaskResponse response = new TaskResponse();
+
+        response.setId(task.getId());
+        response.setProjectId(
+                task.getProject() != null ? task.getProject().getId() : null
+        );
+        response.setTitle(task.getTitle());
+        response.setDescription(task.getDescription());
+        response.setPriority(task.getPriority());
+        response.setStatus(task.getStatus());
+        response.setStartDate(task.getStartDate());
+        response.setDueDate(task.getDueDate());
+        response.setAssigneeId(
+                task.getAssignee() != null ? task.getAssignee().getId() : null
+        );
+        response.setCreatedBy(
+                task.getCreatedBy() != null ? task.getCreatedBy().getId() : null
+        );
+
+        return response;
     }
 
     public Long getId() {
@@ -52,11 +82,11 @@ public class TaskResponse {
         this.description = description;
     }
 
-    public Priority getPriority() {
+    public TaskPriority getPriority() {
         return priority;
     }
 
-    public void setPriority(Priority priority) {
+    public void setPriority(TaskPriority priority) {
         this.priority = priority;
     }
 
