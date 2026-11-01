@@ -1,0 +1,125 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Management Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header class="topbar">
+        <div class="brand">TaskFlow</div>
+        <nav>
+            <a href="#dashboard">Dashboard</a>
+            <a href="#projects">Projects</a>
+            <a href="#tasks">Tasks</a>
+        </nav>
+    </header>
+
+    <main class="container">
+
+        <section id="dashboard">
+            <div class="welcome">
+                <div>
+                    <p class="eyebrow">WORKSPACE</p>
+                    <h1>Task Management</h1>
+                    <p>Organise your projects and keep track of your work.</p>
+                </div>
+                <button id="refreshBtn" class="secondary-btn">Refresh</button>
+            </div>
+
+            <div class="stats">
+                <div class="stat-card">
+                    <p>Total Projects</p>
+                    <h2 id="projectCount">0</h2>
+                </div>
+                <div class="stat-card">
+                    <p>Total Tasks</p>
+                    <h2 id="taskCount">0</h2>
+                </div>
+                <div class="stat-card">
+                    <p>Completed Tasks</p>
+                    <h2 id="completedCount">0</h2>
+                </div>
+                <div class="stat-card">
+                    <p>Pending Tasks</p>
+                    <h2 id="pendingCount">0</h2>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="section-card">
+            <div class="section-heading">
+                <div>
+                    <h2>Projects</h2>
+                    <p>Create and manage your projects.</p>
+                </div>
+            </div>
+
+            <form id="projectForm" class="form-grid">
+                <input id="projectName" type="text"
+                       placeholder="Project name" required>
+                <input id="projectDescription" type="text"
+                       placeholder="Project description">
+                <button type="submit">Add Project</button>
+            </form>
+
+            <div id="projectMessage" class="message"></div>
+            <div id="projectList" class="project-grid"></div>
+        </section>
+
+        <section id="tasks" class="section-card">
+            <div class="section-heading">
+                <div>
+                    <h2>Tasks</h2>
+                    <p>Create, filter and update your tasks.</p>
+                </div>
+            </div>
+
+            <form id="taskForm" class="form-grid task-form">
+                <input id="taskTitle" type="text"
+                       placeholder="Task title" required>
+
+                <input id="taskDescription" type="text"
+                       placeholder="Task description">
+
+                <select id="taskProject" required>
+                    <option value="">Select project</option>
+                </select>
+
+                <select id="taskStatus">
+                    <option value="PENDING">Pending</option>
+                    <option value="IN_PROGRESS">In Progress</option>
+                    <option value="COMPLETED">Completed</option>
+                </select>
+
+                <button type="submit">Add Task</button>
+            </form>
+
+            <div id="taskMessage" class="message"></div>
+
+            <div class="filter-row">
+                <label for="statusFilter">Filter by status:</label>
+                <select id="statusFilter">
+                    <option value="ALL">All Tasks</option>
+                    <option value="PENDING">Pending</option>
+                    <option value="IN_PROGRESS">In Progress</option>
+                    <option value="COMPLETED">Completed</option>
+                </select>
+            </div>
+
+            <div id="taskList" class="task-list"></div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>TaskFlow - Task Management System</p>
+    </footer>
+
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
