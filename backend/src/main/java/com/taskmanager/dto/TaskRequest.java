@@ -3,19 +3,41 @@ package com.taskmanager.dto;
 
 import com.taskmanager.entity.TaskPriority;
 import com.taskmanager.entity.TaskStatus;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
+import jakarta.validation.groups.Default;
 
 import java.time.LocalDate;
 
 public class TaskRequest {
 
+    public interface OnCreate extends Default {
+    }
+
+    @NotNull(groups = OnCreate.class, message = "must be provided")
+    @Positive(message = "must be a positive number")
     private Long projectId;
+
+    @NotBlank(groups = OnCreate.class, message = "must not be blank")
+    @Size(max = 150, message = "must not exceed 150 characters")
     private String title;
+
+    @Size(max = 65_535, message = "must not exceed 65535 characters")
     private String description;
+
     private TaskPriority priority;
     private TaskStatus status;
+
+    @NotNull(groups = OnCreate.class, message = "must be provided")
     private LocalDate startDate;
+
     private LocalDate dueDate;
+
+    @Positive(message = "must be a positive number")
     private Long assigneeId;
+
     private Long createdBy;
 
     public TaskRequest() {

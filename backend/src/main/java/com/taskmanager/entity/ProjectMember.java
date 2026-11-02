@@ -9,4 +9,16 @@ public class ProjectMember {
     @ManyToOne(fetch = FetchType.LAZY, optional = false) @JoinColumn(name = "project_id", nullable = false) private Project project;
     @ManyToOne(fetch = FetchType.LAZY, optional = false) @JoinColumn(name = "user_id", nullable = false) private User user;
     @Column(name = "membership_role", nullable = false, length = 30) private String membershipRole;
+
+    protected ProjectMember() { }
+
+    public ProjectMember(Project project, User user, String membershipRole) {
+        this.project = project;
+        this.user = user;
+        this.membershipRole = membershipRole;
+    }
+
+    public Project getProject() { return project; }
+    public User getUser() { return user; }
+    public String getMembershipRole() { return membershipRole; }
 }
